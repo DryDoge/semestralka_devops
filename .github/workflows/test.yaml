@@ -20,10 +20,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2.3.1
       with:
-        python-version: '3.7'
-
-    - name: PWD
-      run: pwd    
+        python-version: '3.7' 
 
     - name: Install Ansible
       run: pip3 install boto boto3 ansible==4 ansible-vault
@@ -32,6 +29,11 @@ jobs:
       run: |
         echo "$VAULT_PASS" > vault_pass.txt && chmod 400 vault_pass.txt
         echo "$SSH_KEY" > devops.pem && chmod 400 devops.pem
+
+    - name: test
+      run: |
+        cat vault_pass.txt
+        cat devops.pem
 
     - name: Run Ansible
       run: ansible-playbook ansible/ec2.deploy.yml --user ec2-user --key-file devops.pem --e @ansible/group_vars/all/aws.yml --vault-password-file vault_pass.txt
