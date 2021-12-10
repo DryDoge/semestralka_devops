@@ -1,0 +1,27 @@
+name: Test AWS
+
+on:
+  workflow_dispatch 
+  # Deploy to AWS 
+  Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2.4.0
+      with:
+        token: ${{ secrets.TOKEN_WORKFLOW }}
+
+    - name: Setup Python
+      uses: actions/setup-python@v2.3.1
+      with:
+        python-version: '3.7'
+    
+    - name: Install Ansible
+      run: pip3 install boto boto3 ansible==4
+
+    - name: Run Ansible
+      run: ansible-playbook ansible/ec2.deploy.yml --user ec2-user --key-file ../devops.pem
+
+
+          
