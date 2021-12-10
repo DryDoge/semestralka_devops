@@ -27,11 +27,11 @@ jobs:
 
     - name: Prepare ssh key and vault password
       run: |
-        echo "$VAULT_PASS" > vault_pass.txt
-        echo "$SSH_KEY" > devops.pem
-        chmod 400 vault_pass.txt
-        chmod 400 devops.pem
-        ssh-keygen -p -f devops.pem -m pem
+        sudo echo "$VAULT_PASS" > vault_pass.txt
+        sudo echo "$SSH_KEY" > devops.pem
+        sudo chmod 400 vault_pass.txt
+        sudo chmod 400 devops.pem
+        sudo ssh-keygen -p -f devops.pem -m pem
 
     - name: test
       run: ll -r ./*
