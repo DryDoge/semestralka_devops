@@ -27,7 +27,7 @@ jobs:
 
     - name: Prepare ssh key and vault password
       run: |
-        echo "$VAULT_PASS" > ~/vault_pass.txt
+        echo "$VAULT_PASS" > ~/vault_pass.txt && chmod 400 ~/vault_pass.txt
         echo "SSH_KEY" > ~/devops.pem && chmod 400 ~/devops.pem
 
     - name: Run Ansible
