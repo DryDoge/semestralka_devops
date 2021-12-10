@@ -8,8 +8,8 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     env:
-      VAULT_PASS: {{ secrets.VAULT_PASS }}
-      SSH_KEY: {{ secrets.SSH_KEY }}
+      VAULT_PASS: ${{ secrets.VAULT_PASS }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
 
     steps:
     - name: Git Checkout
