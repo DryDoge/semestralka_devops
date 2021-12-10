@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VAULT_PASS: ${{ secrets.VAULT_PASS }}
-      SSH_KEY: ${{ secrets.SSH_KEY }}
+      # SSH_KEY: ${{ secrets.SSH_KEY }}
 
     steps:
     - name: Git Checkout
@@ -27,11 +27,24 @@ jobs:
 
     - name: Prepare ssh key and vault password
       run: |
-        echo "$VAULT_PASS" > vault_pass.txt
-        echo "$SSH_KEY" > devops.pem
+        echo "$VAULT_PASS" > vault_pass.txt  
         chmod 400 vault_pass.txt
-        chmod 400 devops.pem
-        sudo ssh-keygen -p -f devops.pem -m pem
+
+
+    - name: View
+      run: |
+        ansible-vault view ansible/group_vars/all/aws.yml --vault-password-file vault_pass.txt
+
+        
+
+    # echo "$SSH_KEY" > devops.pem chmod 400 devops.pem  sudo ssh-keygen -p -f devops.pem -m pem
+
+    - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          name: devops.pem
+          known_hosts: ''
 
     - name: Run Ansible
       run: ansible-playbook ansible/ec2.deploy.yml --user ec2-user --key-file devops.pem --e @ansible/group_vars/all/aws.yml --vault-password-file vault_pass.txt
