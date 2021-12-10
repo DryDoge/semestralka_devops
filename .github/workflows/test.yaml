@@ -23,7 +23,7 @@ jobs:
         python-version: '3.7'
 
     - name: Test
-      run: ls -r ~/.
+      run: ls -r ~/work/semestralka_devops
 
     - name: Install Ansible
       run: pip3 install boto boto3 ansible==4 ansible-vault
