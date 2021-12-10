@@ -30,10 +30,10 @@ jobs:
 
     - name: Prepare ssh key and vault password
       run: |
-        echo "$VAULT_PASS" > ~/vault_pass.txt && chmod 400 ~/vault_pass.txt
-        echo "SSH_KEY" > ~/devops.pem && chmod 400 ~/devops.pem
+        echo "$VAULT_PASS" > ~/work/vault_pass.txt && chmod 400 ~/work/vault_pass.txt
+        echo "SSH_KEY" > ~/work/devops.pem && chmod 400 ~/work/devops.pem
 
     - name: Run Ansible
-      run: ansible-playbook semestralka_devops/ansible/ec2.deploy.yml --user ec2-user --key-file ~/devops.pem --e @semestralka_devops/ansible/group_vars/all/aws.yml --vault-password-file ~/vault_pass.txt
+      run: ansible-playbook ~/work/semestralka_devops/ansible/ec2.deploy.yml --user ec2-user --key-file ~/devops.pem --e @~/work/semestralka_devops/ansible/group_vars/all/aws.yml --vault-password-file ~/work/vault_pass.txt
 
           
