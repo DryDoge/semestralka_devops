@@ -21,7 +21,10 @@ jobs:
       uses: actions/setup-python@v2.3.1
       with:
         python-version: '3.7'
-    
+
+    - name: Test
+      run: ls -r semestralka_devops
+
     - name: Install Ansible
       run: pip3 install boto boto3 ansible==4 ansible-vault
 
@@ -31,6 +34,6 @@ jobs:
         echo "SSH_KEY" > ~/devops.pem && chmod 400 ~/devops.pem
 
     - name: Run Ansible
-      run: ansible-playbook ~/semestralka_devops/ansible/ec2.deploy.yml --user ec2-user --key-file ~/devops.pem --e @semestralka_devops/ansible/group_vars/all/aws.yml --vault-password-file ~/vault_pass.txt
+      run: ansible-playbook semestralka_devops/ansible/ec2.deploy.yml --user ec2-user --key-file ~/devops.pem --e @semestralka_devops/ansible/group_vars/all/aws.yml --vault-password-file ~/vault_pass.txt
 
           
