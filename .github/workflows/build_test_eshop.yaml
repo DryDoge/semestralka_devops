@@ -1,4 +1,4 @@
-name: Buil, test and deploy our Eshop
+name: Build, test and deploy our Eshop
 
 on:
   push:
@@ -95,26 +95,27 @@ jobs:
         run: npm run test -- --colors
     
   # Deploy to AWS 
-  #
-  # Deploy:
-  #   needs: [Build, Test]
-  #   runs-on: ubuntu-latest
-  #   if: ${{ github.ref == 'refs/heads/main' }}
+  Deploy:
+    needs: [Build, Test]
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
 
-  #   steps:
-  #     - name: Git Checkout
-  #       uses: actions/checkout@v2.4.0
-  #       with:
-  #         token: ${{ secrets.TOKEN_WORKFLOW }}
+    steps:
+    - name: Git Checkout
+        uses: actions/checkout@v2.4.0
+        with:
+          token: ${{ secrets.TOKEN_WORKFLOW }}
 
-  #     - name: Load node modules and build folder
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: |
-  #           ~/.npm
-  #           ./node_modules
-  #           ./build
-  #         key: ${{ runner.os }}-build-${{ github.run_id }}
-      
-  #     - name: Deploy to firebase
-  #       run: ./node_modules/.bin/firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
+    - name: Setup Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: '3.7'
+    
+    - name: Install Ansible
+      run: pip3 install boto boto3 ansible==4
+
+    - name: Run Ansible
+      run: ansible-playbook ansible/ec2.deploy.yml --user ec2-user --key-file ../devops.pem
+
+
+          
