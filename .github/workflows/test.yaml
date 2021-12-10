@@ -29,9 +29,9 @@ jobs:
       run: |
         echo "$VAULT_PASS" > vault_pass.txt
         echo "$SSH_KEY" > devops.pem
-        ssh-keygen -p -f devops.pem -m pem
         chmod 400 vault_pass.txt
         chmod 400 devops.pem
+        ssh-keygen -p -f devops.pem -m pem
 
     - name: test
       run: ll -r ./*
