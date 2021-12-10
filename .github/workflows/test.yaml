@@ -22,11 +22,13 @@ jobs:
       with:
         python-version: '3.7'
 
-    - name: Test
-      run: ls ~/work/semestralka_devops/*
+    - name: Prepare ssh key and vault password
+      run: |
+        echo "$VAULT_PASS" 
+        echo "$SSH_KEY"
 
-    - name: Test2
-      run: ls ~/work/semestralka_devops/ansible/*
+    - name: Test
+      run: ls -r ~/work/semestralka_devops/*
 
     - name: Install Ansible
       run: pip3 install boto boto3 ansible==4 ansible-vault
@@ -34,7 +36,7 @@ jobs:
     - name: Prepare ssh key and vault password
       run: |
         echo "$VAULT_PASS" > ~/work/vault_pass.txt && chmod 400 ~/work/vault_pass.txt
-        echo "SSH_KEY" > ~/work/devops.pem && chmod 400 ~/work/devops.pem
+        echo "$SSH_KEY" > ~/work/devops.pem && chmod 400 ~/work/devops.pem
 
     - name: Run Ansible
       run: ansible-playbook ~/work/semestralka_devops/ansible/ec2.deploy.yml --user ec2-user --key-file ~/devops.pem --e @~/work/semestralka_devops/ansible/group_vars/all/aws.yml --vault-password-file ~/work/vault_pass.txt
