@@ -3,13 +3,13 @@
   connection: local
 
   tasks: 
-    - name: Get info
+    - name: Get actual info about instances
       ec2_instance_info:
         region: us-east-1
         aws_access_key: "{{access_key}}"
         aws_secret_key: "{{secret_key}}"
         security_token: "{{session_token}}"
-      register: info
+      register: actual
 
     - name: Launch EC2 instance
       amazon.aws.ec2:
@@ -96,7 +96,5 @@
         aws_access_key: "{{access_key}}"
         aws_secret_key: "{{secret_key}}"
         security_token: "{{session_token}}"
-
-      loop: "{{ info.instances }}"
-      loop_control:
-        label: "{{ item.instance_id }}"
+        wait: yes
+      with_items: "{{actual.instances}}"
