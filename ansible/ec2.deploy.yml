@@ -3,13 +3,24 @@
   connection: local
 
   tasks: 
+    ec2_instance_info:
+      region: us-east-1
+      aws_access_key: "{{access_key}}"
+      aws_secret_key: "{{secret_key}}"
+      security_token: "{{session_token}}"
+    register: info
+
+    - name: Write info
+      debug: msg="{{item.instance_id}} and state={{item.state}}"
+      with_items: "{{info.instances}}"
+
     - name: Launch EC2 instance
       amazon.aws.ec2:
         instance_type: t2.small
         image: ami-04902260ca3d33422
         region: us-east-1
         key_name: devops #SSH 
-        vpc_subnet_id: subnet-0e6b357609af9a48a
+        vpc_subnet_id: subnet-0794eac8324d4e161
         assign_public_ip: yes
         count: 1
         group: Eshop
@@ -74,16 +85,3 @@
       become: yes
     - wait_for:
         port: 80
-
-
-        #ansible-vault create group_vars/all/aws.yml  ... moze byt create alebo edit
-        #access_key: xxxx
-        #secret_key: xxxx
-        #session_token: xxxx
-
-
-        #sudo yum install git 
-        #pip3 install boto boto3 ansible==4
-        
-
-        #ansible-playbook ec2.deploy.yml --user ec2-user --key-file ../devops.pem
