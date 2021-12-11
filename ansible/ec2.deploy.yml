@@ -3,12 +3,13 @@
   connection: local
 
   tasks: 
-    ec2_instance_info:
-      region: us-east-1
-      aws_access_key: "{{access_key}}"
-      aws_secret_key: "{{secret_key}}"
-      security_token: "{{session_token}}"
-    register: info
+    - name: Get info
+      ec2_instance_info:
+        region: us-east-1
+        aws_access_key: "{{access_key}}"
+        aws_secret_key: "{{secret_key}}"
+        security_token: "{{session_token}}"
+      register: info
 
     - name: Write info
       debug: msg="{{item.instance_id}} and state={{item.state}}"
